@@ -5,7 +5,7 @@ import { loadConfig } from "../../config/config";
 import { logger } from "../../logging/logger";
 import { getConverterForFile } from "../../formats/converterFactory";
 import { loadCachedMarkdown, saveCachedMarkdown } from "../../cache/cache";
-import { buildHeadingTree, parseHeadings, renderHeadingTree } from "../../markdown/headings";
+import { buildHeadingTree, parseHeadings } from "../../markdown/headings";
 import { extractSection } from "../../markdown/section";
 import { promptForSection } from "../../tui/menu";
 import { loadSystemPrompt } from "../../prompts/promptLoader";
@@ -47,15 +47,14 @@ export const runSummarizeCommand = async (argv: string[]): Promise<void> => {
 
   const headings = parseHeadings(markdown);
   const headingTree = buildHeadingTree(headings);
-  const headingLines = renderHeadingTree(headingTree);
 
   logger.info(`Parsed ${headings.length} headings from Markdown`);
-  if (headingLines.length === 0) {
+  if (headings.length === 0) {
     logger.warn("No headings found in the document");
   }
 
   logger.info("Opening section selection menu");
-  const selection = await promptForSection(headingLines, headings.length);
+  const selection = await promptForSection(headingTree, headings.length);
   if (selection.action === "exit") {
     logger.info("User exited without summarization");
     return;
