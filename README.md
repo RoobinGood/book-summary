@@ -11,18 +11,33 @@ npm run build
 
 ## Run
 
+Summarize:
 ```
-node dist/index.js --input /path/to/book.epub --output /path/to/summary.md
+node dist/cli/index.js summarize --input /path/to/book.epub --output /path/to/summary.md
 ```
 
-Optional flags:
+Optional flags for summarize:
 - `--overwrite` to replace an existing output file
 - `--cache` to store and reuse `<input>.md` and `<input>.md5`
 
+Export Markdown:
+```
+node dist/cli/index.js export --input /path/to/summary.md --format html
+```
+
+Optional flags for export:
+- `--overwrite` to replace an existing output file
+
 ## Run without build
 
+Summarize:
 ```
-npm run dev -- --input /path/to/book.epub --output /path/to/summary.md
+npm run dev -- summarize --input /path/to/book.epub --output /path/to/summary.md
+```
+
+Export Markdown:
+```
+npm run dev -- export --input /path/to/summary.md --format pdf
 ```
 
 ## Configuration
