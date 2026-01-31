@@ -1,10 +1,8 @@
 import { promises as fs } from "fs";
-import { parseSummarizeArgs } from "../common/args";
+import { extname } from "path";
 import { ensureFileReadable, ensureOutputWritable } from "../common/files";
 import { loadConfig } from "../../config/config";
 import { logger } from "../../logging/logger";
-import { getConverterForFile } from "../../formats/converterFactory";
-import { loadCachedMarkdown, saveCachedMarkdown } from "../../cache/cache";
 import { buildHeadingTree, parseHeadings } from "../../markdown/headings";
 import { extractSection } from "../../markdown/section";
 import { promptForSection } from "../../tui/menu";
@@ -12,38 +10,27 @@ import { loadSystemPrompt } from "../../prompts/promptLoader";
 import { summarizeWithChainOfDensity } from "../../summary/chainOfDensity";
 import { countTokens } from "../../llm/tokenizer";
 
-const printSummarizeUsage = (): void => {
-  const usage = [
-    "Usage:",
-    "  book-summary summarize --input <path> --output <path> [--overwrite] [--cache]"
-  ];
-  process.stdout.write(`${usage.join("\n")}\n`);
+export type SummarizeCommandOptions = {
+  inputPath: string;
+  outputPath: string;
+  overwrite: boolean;
 };
 
-export const runSummarizeCommand = async (argv: string[]): Promise<void> => {
-  if (argv.includes("--help") || argv.includes("-h")) {
-    printSummarizeUsage();
-    return;
-  }
-  const options = parseSummarizeArgs(argv);
+export const runSummarizeCommand = async (
+  options: SummarizeCommandOptions
+): Promise<void> => {
   const config = loadConfig();
 
   logger.info("Starting book summary tool");
 
+  if (extname(options.inputPath).toLowerCase() !== ".md") {
+    throw new Error("Input must be a Markdown file with .md extension");
+  }
+
   await ensureFileReadable(options.inputPath);
   await ensureOutputWritable(options.outputPath, options.overwrite);
 
-  const cached = await loadCachedMarkdown(options.inputPath, options.cache);
-  let markdown: string;
-
-  if (cached) {
-    markdown = cached.markdown;
-  } else {
-    const converter = getConverterForFile(options.inputPath);
-    const result = await converter.convert(options.inputPath);
-    markdown = result.markdown;
-    await saveCachedMarkdown(options.inputPath, markdown, options.cache);
-  }
+  const markdown = await fs.readFile(options.inputPath, "utf-8");
 
   const headings = parseHeadings(markdown);
   const headingTree = buildHeadingTree(headings);

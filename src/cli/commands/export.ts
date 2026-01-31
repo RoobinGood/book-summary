@@ -1,16 +1,13 @@
 import { promises as fs } from "fs";
 import { extname, parse as parsePath, join } from "path";
-import { parseExportArgs } from "../common/args";
 import { ensureFileReadable, ensureOutputWritable } from "../common/files";
 import { logger } from "../../logging/logger";
 import { getExportConverter } from "../../formats/export/converterFactory";
 
-const printExportUsage = (): void => {
-  const usage = [
-    "Usage:",
-    "  book-summary export --input <path.md> --format <html|pdf> [--overwrite]"
-  ];
-  process.stdout.write(`${usage.join("\n")}\n`);
+export type ExportCommandOptions = {
+  inputPath: string;
+  format: string;
+  overwrite: boolean;
 };
 
 const resolveOutputPath = (
@@ -21,12 +18,9 @@ const resolveOutputPath = (
   return join(parsed.dir, `${parsed.name}.${extension}`);
 };
 
-export const runExportCommand = async (argv: string[]): Promise<void> => {
-  if (argv.includes("--help") || argv.includes("-h")) {
-    printExportUsage();
-    return;
-  }
-  const options = parseExportArgs(argv);
+export const runExportCommand = async (
+  options: ExportCommandOptions
+): Promise<void> => {
   const format = options.format.toLowerCase();
 
   if (extname(options.inputPath).toLowerCase() !== ".md") {

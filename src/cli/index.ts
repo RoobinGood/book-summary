@@ -1,19 +1,58 @@
-import { logger } from "../logging/logger";
+import { Command } from "commander";
+import { runImportCommand } from "./commands/import";
 import { runExportCommand } from "./commands/export";
 import { runSummarizeCommand } from "./commands/summarize";
 
-const printUsage = (): void => {
-  const usage = [
-    "Usage:",
-    "  book-summary <command> [options]",
-    "",
-    "Commands:",
-    "  summarize  Summarize a document with section selection",
-    "  export     Convert Markdown to html or pdf",
-    "",
-    "Run with --help on a command to see its options."
-  ];
-  process.stdout.write(`${usage.join("\n")}\n`);
+const createCli = (): Command => {
+  const program = new Command();
+
+  program
+    .name("book-summary")
+    .description(
+      "Convert documents to Markdown, summarize sections, and export formats."
+    );
+
+  program
+    .command("import")
+    .description("Convert a document to Markdown")
+    .requiredOption("-i, --input <path>", "Input file path")
+    .option("-o, --output <path>", "Output Markdown path")
+    .action(async (options) => {
+      await runImportCommand({
+        inputPath: options.input,
+        outputPath: options.output
+      });
+    });
+
+  program
+    .command("summarize")
+    .description("Summarize a Markdown document with section selection")
+    .requiredOption("-i, --input <path>", "Input Markdown path")
+    .requiredOption("-o, --output <path>", "Output summary path")
+    .option("--overwrite", "Overwrite existing output file")
+    .action(async (options) => {
+      await runSummarizeCommand({
+        inputPath: options.input,
+        outputPath: options.output,
+        overwrite: Boolean(options.overwrite)
+      });
+    });
+
+  program
+    .command("export")
+    .description("Convert Markdown to HTML or PDF")
+    .requiredOption("-i, --input <path>", "Input Markdown path")
+    .requiredOption("-f, --format <format>", "Output format: html | pdf")
+    .option("--overwrite", "Overwrite existing output file")
+    .action(async (options) => {
+      await runExportCommand({
+        inputPath: options.input,
+        format: options.format,
+        overwrite: Boolean(options.overwrite)
+      });
+    });
+
+  return program;
 };
 
 export const runCli = async (argv: string[]): Promise<void> => {
@@ -21,26 +60,9 @@ export const runCli = async (argv: string[]): Promise<void> => {
   const first = args[0] ?? "";
   const normalizedArgs =
     first.endsWith(".ts") || first.endsWith(".js") ? args.slice(1) : args;
-  const command = normalizedArgs[0];
-  const rest = normalizedArgs.slice(1);
 
-  if (!command || command === "--help" || command === "-h") {
-    printUsage();
-    return;
-  }
-
-  switch (command) {
-    case "summarize":
-      await runSummarizeCommand(rest);
-      return;
-    case "export":
-      await runExportCommand(rest);
-      return;
-    default:
-      logger.error(`Unknown command: ${command}`);
-      printUsage();
-      process.exitCode = 1;
-  }
+  const program = createCli();
+  await program.parseAsync(["node", "book-summary", ...normalizedArgs]);
 };
 
 if (require.main === module) {

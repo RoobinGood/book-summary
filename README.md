@@ -9,33 +9,47 @@ npm install
 npm run build
 ```
 
-## Run
+## Scripts
 
-Summarize:
+### import
+Purpose: convert supported formats (e.g. EPUB) to Markdown.
+How it works: picks a converter by input extension and writes Markdown to a file.
+Parameters: `--input <path>`, `--output <path>` (optional, defaults next to input)
+Example:
 ```
-node dist/cli/index.js summarize --input /path/to/book.epub --output /path/to/summary.md
+node dist/cli/index.js import --input /path/to/book.epub --output /path/to/book.md
+```
+Default output example:
+```
+node dist/cli/index.js import --input /path/to/book.epub
+```
+Without build:
+```
+npm run dev -- import --input /path/to/book.epub --output /path/to/book.md
 ```
 
-Optional flags for summarize:
-- `--overwrite` to replace an existing output file
-- `--cache` to store and reuse `<input>.md` and `<input>.md5`
+### summarize
+Purpose: summarize Markdown with chapter selection via TUI.
+How it works: parses headings, lets you pick a section, sends selected text to the LLM.
+Parameters: `--input <path>`, `--output <path>`, `--overwrite`
+Example:
+```
+node dist/cli/index.js summarize --input /path/to/book.md --output /path/to/summary.md
+```
+Without build:
+```
+npm run dev -- summarize --input /path/to/book.md --output /path/to/summary.md
+```
 
-Export Markdown:
+### export
+Purpose: export Markdown to HTML or PDF.
+How it works: converts Markdown to the selected format and saves next to input.
+Parameters: `--input <path>`, `--format <html|pdf>`, `--overwrite`
+Example:
 ```
 node dist/cli/index.js export --input /path/to/summary.md --format html
 ```
-
-Optional flags for export:
-- `--overwrite` to replace an existing output file
-
-## Run without build
-
-Summarize:
-```
-npm run dev -- summarize --input /path/to/book.epub --output /path/to/summary.md
-```
-
-Export Markdown:
+Without build:
 ```
 npm run dev -- export --input /path/to/summary.md --format pdf
 ```
