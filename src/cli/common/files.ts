@@ -1,4 +1,4 @@
-import { promises as fs } from "fs";
+import { promises as fs } from "node:fs";
 
 export const ensureFileReadable = async (path: string): Promise<void> => {
   await fs.access(path);

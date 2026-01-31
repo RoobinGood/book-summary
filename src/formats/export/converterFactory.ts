@@ -1,4 +1,4 @@
-import { ExportConverter, ExportFormat } from "./types";
+import type { ExportConverter, ExportFormat } from "./types";
 import { HtmlExportConverter } from "./htmlConverter";
 import { PdfExportConverter } from "./pdfConverter";
 

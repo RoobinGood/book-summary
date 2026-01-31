@@ -1,5 +1,5 @@
 import puppeteer from "puppeteer";
-import { ExportConversionResult, ExportConverter } from "./types";
+import type { ExportConversionResult, ExportConverter } from "./types";
 import { renderMarkdownDocument } from "./htmlDocument";
 
 export class PdfExportConverter implements ExportConverter {

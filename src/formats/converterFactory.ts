@@ -1,5 +1,5 @@
-import { extname } from "path";
-import { DocumentConverter } from "./types";
+import { extname } from "node:path";
+import type { DocumentConverter } from "./types";
 import { EpubConverter } from "./epub/epubConverter";
 
 const converters: DocumentConverter[] = [new EpubConverter()];

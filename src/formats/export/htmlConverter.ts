@@ -1,4 +1,4 @@
-import { ExportConversionResult, ExportConverter } from "./types";
+import type { ExportConversionResult, ExportConverter } from "./types";
 import { renderMarkdownDocument } from "./htmlDocument";
 
 export class HtmlExportConverter implements ExportConverter {

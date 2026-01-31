@@ -1,4 +1,4 @@
-import { LlmConfig } from "../config/config";
+import type { LlmConfig } from "../config/config";
 import { createChatCompletion } from "../llm/client";
 import { countTokens } from "../llm/tokenizer";
 import { logger } from "../logging/logger";

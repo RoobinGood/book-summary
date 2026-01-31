@@ -1,5 +1,5 @@
-import { promises as fs } from "fs";
-import { join, parse as parsePath } from "path";
+import { promises as fs } from "node:fs";
+import { join, parse as parsePath } from "node:path";
 import { ensureFileReadable, ensureOutputWritable } from "../common/files";
 import { logger } from "../../logging/logger";
 import { getConverterForFile } from "../../formats/converterFactory";

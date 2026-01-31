@@ -1,7 +1,7 @@
-import { createInterface } from "readline/promises";
-import readline from "readline";
-import { stdin as input, stdout as output } from "process";
-import { HeadingNode, renderHeadingTree } from "../markdown/headings";
+import { createInterface } from "node:readline/promises";
+import readline from "node:readline";
+import { stdin as input, stdout as output } from "node:process";
+import { type HeadingNode, renderHeadingTree } from "../markdown/headings";
 
 type MenuResult =
   | { action: "exit" }
@@ -18,7 +18,9 @@ export const promptForSection = async (
       const headingLines = renderHeadingTree(headingTree);
       output.write("\nSelect a section to summarize:\n");
       output.write("0. Entire document\n");
-      headingLines.forEach((line) => output.write(`${line}\n`));
+      for (const line of headingLines) {
+        output.write(`${line}\n`);
+      }
       output.write("q. Quit\n");
 
       while (true) {

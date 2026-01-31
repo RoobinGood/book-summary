@@ -1,5 +1,5 @@
-import { createHash } from "crypto";
-import { promises as fs } from "fs";
+import { createHash } from "node:crypto";
+import { promises as fs } from "node:fs";
 import { logger } from "../logging/logger";
 
 const hashFile = async (filePath: string): Promise<string> => {

@@ -1,7 +1,7 @@
 import { encoding_for_model, get_encoding, type TiktokenModel } from "@dqbd/tiktoken";
 
 export const countTokens = (text: string, model: string): number => {
-  let encoding;
+  let encoding: ReturnType<typeof get_encoding>;
   try {
     encoding = encoding_for_model(model as TiktokenModel);
   } catch {

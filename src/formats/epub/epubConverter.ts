@@ -1,6 +1,6 @@
 import EPub from "epub";
 import TurndownService from "turndown";
-import { DocumentConversionResult, DocumentConverter } from "../types";
+import type { DocumentConversionResult, DocumentConverter } from "../types";
 import { logger } from "../../logging/logger";
 
 const createTurndownService = (): TurndownService => {

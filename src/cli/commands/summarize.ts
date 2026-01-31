@@ -1,5 +1,5 @@
-import { promises as fs } from "fs";
-import { extname } from "path";
+import { promises as fs } from "node:fs";
+import { extname } from "node:path";
 import { ensureFileReadable, ensureOutputWritable } from "../common/files";
 import { loadConfig } from "../../config/config";
 import { logger } from "../../logging/logger";

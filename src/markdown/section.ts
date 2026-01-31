@@ -1,4 +1,4 @@
-import { Heading } from "./headings";
+import type { Heading } from "./headings";
 
 export const extractSection = (
   markdown: string,
