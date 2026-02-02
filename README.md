@@ -35,10 +35,15 @@ npm run dev -- import --input /path/to/book.epub --output /path/to/book.md
 ### summarize
 Purpose: summarize Markdown with chapter selection via TUI.
 How it works: parses headings, lets you pick a section, sends selected text to the LLM.
-Parameters: `--input <path>`, `--output <path>`, `--overwrite`
+Parameters: `--input <path>`, `--output <path>`, `--method <stuff-dense|stuff-quotations>`, `--export <formats>`, `--overwrite`
+If `--output` points to a directory, filename defaults to `summary-<method>.md`.
 Example:
 ```
 node dist/cli/index.js summarize --input /path/to/book.md --output /path/to/summary.md
+```
+With method and export:
+```
+node dist/cli/index.js summarize --input /path/to/book.md --output /path/to/summary.md --method stuff-quotations --export html,pdf
 ```
 Without build:
 ```
@@ -64,5 +69,3 @@ Copy `.env.example` to `.env` and adjust values:
 - `LLM_URL`, `LLM_MODEL`, `LLM_API_KEY`
 - `LLM_MAX_CONTEXT_TOKENS`, `LLM_MAX_OUTPUT_TOKENS`
 - `LLM_TEMPERATURE`, `LLM_TOP_P`, penalties
-- `LLM_DENSITY_PASSES`
-- `LLM_SYSTEM_PROMPT_PATH`

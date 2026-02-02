@@ -41,8 +41,6 @@ export type LlmConfig = {
   topP?: number;
   frequencyPenalty?: number;
   presencePenalty?: number;
-  densityPasses: number;
-  systemPromptPath: string;
 };
 
 export type AppConfig = {
@@ -50,11 +48,6 @@ export type AppConfig = {
 };
 
 export const loadConfig = (): AppConfig => {
-  const densityPasses = parseNumber("LLM_DENSITY_PASSES");
-  if (densityPasses < 1) {
-    throw new Error("LLM_DENSITY_PASSES must be at least 1");
-  }
-
   return {
     llm: {
       url: requireEnv("LLM_URL"),
@@ -65,9 +58,7 @@ export const loadConfig = (): AppConfig => {
       temperature: parseOptionalNumber("LLM_TEMPERATURE"),
       topP: parseOptionalNumber("LLM_TOP_P"),
       frequencyPenalty: parseOptionalNumber("LLM_FREQUENCY_PENALTY"),
-      presencePenalty: parseOptionalNumber("LLM_PRESENCE_PENALTY"),
-      densityPasses,
-      systemPromptPath: requireEnv("LLM_SYSTEM_PROMPT_PATH")
+      presencePenalty: parseOptionalNumber("LLM_PRESENCE_PENALTY")
     }
   };
 };

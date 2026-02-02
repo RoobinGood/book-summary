@@ -29,12 +29,23 @@ const createCli = (): Command => {
     .description("Summarize a Markdown document with section selection")
     .requiredOption("-i, --input <path>", "Input Markdown path")
     .requiredOption("-o, --output <path>", "Output summary path")
+    .option(
+      "-m, --method <method>",
+      "Summarization method: stuff-dense | stuff-quotations",
+      "stuff-dense"
+    )
+    .option(
+      "-e, --export <formats>",
+      "Export formats list (comma-separated)"
+    )
     .option("--overwrite", "Overwrite existing output file")
     .action(async (options) => {
       await runSummarizeCommand({
         inputPath: options.input,
         outputPath: options.output,
-        overwrite: Boolean(options.overwrite)
+        overwrite: Boolean(options.overwrite),
+        method: options.method,
+        exportFormats: options.export
       });
     });
 
