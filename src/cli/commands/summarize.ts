@@ -1,6 +1,10 @@
 import { promises as fs } from "node:fs";
-import { extname } from "node:path";
-import { ensureFileReadable, ensureOutputWritable } from "../common/files";
+import { dirname, extname } from "node:path";
+import {
+  ensureDirectoryExists,
+  ensureFileReadable,
+  ensureOutputWritable
+} from "../common/files";
 import { loadConfig } from "../../config/config";
 import { logger } from "../../logging/logger";
 import { buildHeadingTree, parseHeadings } from "../../markdown/headings";
@@ -28,6 +32,7 @@ export const runSummarizeCommand = async (
   }
 
   await ensureFileReadable(options.inputPath);
+  await ensureDirectoryExists(dirname(options.outputPath));
   await ensureOutputWritable(options.outputPath, options.overwrite);
 
   const markdown = await fs.readFile(options.inputPath, "utf-8");

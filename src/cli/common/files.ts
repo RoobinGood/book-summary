@@ -25,3 +25,7 @@ export const ensureOutputWritable = async (
     }
   }
 };
+
+export const ensureDirectoryExists = async (path: string): Promise<void> => {
+  await fs.mkdir(path, { recursive: true });
+};

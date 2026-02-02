@@ -1,6 +1,10 @@
 import { promises as fs } from "node:fs";
-import { join, parse as parsePath } from "node:path";
-import { ensureFileReadable, ensureOutputWritable } from "../common/files";
+import { dirname, join, parse as parsePath } from "node:path";
+import {
+  ensureDirectoryExists,
+  ensureFileReadable,
+  ensureOutputWritable
+} from "../common/files";
 import { logger } from "../../logging/logger";
 import { getConverterForFile } from "../../formats/converterFactory";
 
@@ -29,6 +33,7 @@ export const runImportCommand = async (
   logger.info("Starting markdown conversion");
 
   await ensureFileReadable(options.inputPath);
+  await ensureDirectoryExists(dirname(resolvedOutputPath));
   await ensureOutputWritable(resolvedOutputPath, false);
 
   const converter = getConverterForFile(options.inputPath);

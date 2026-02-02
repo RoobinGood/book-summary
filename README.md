@@ -12,12 +12,16 @@ npm run build
 ## Scripts
 
 ### import
-Purpose: convert supported formats (e.g. EPUB) to Markdown.
+Purpose: convert supported formats (EPUB, PDF) to Markdown.
 How it works: picks a converter by input extension and writes Markdown to a file.
 Parameters: `--input <path>`, `--output <path>` (optional, defaults next to input)
 Example:
 ```
 node dist/cli/index.js import --input /path/to/book.epub --output /path/to/book.md
+```
+PDF example:
+```
+node dist/cli/index.js import --input /path/to/book.pdf --output /path/to/book.md
 ```
 Default output example:
 ```
