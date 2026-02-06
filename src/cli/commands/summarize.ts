@@ -67,17 +67,6 @@ const resolveOutputPath = async (
   return outputPath;
 };
 
-const parseExportFormats = (formats?: string): string[] => {
-  if (!formats) {
-    return [];
-  }
-
-  return formats
-    .split(",")
-    .map((format) => format.trim())
-    .filter((format) => format.length > 0);
-};
-
 export const runSummarizeCommand = async (
   options: SummarizeCommandOptions
 ): Promise<void> => {
@@ -132,11 +121,10 @@ export const runSummarizeCommand = async (
   await fs.writeFile(outputPath, summary, "utf-8");
   logger.info(`Summary saved to ${outputPath}`);
 
-  const exportFormats = parseExportFormats(options.exportFormats);
-  for (const format of exportFormats) {
+  if (options.exportFormats) {
     await runExportCommand({
       inputPath: outputPath,
-      format,
+      formats: options.exportFormats,
       overwrite: options.overwrite
     });
   }

@@ -53,12 +53,15 @@ const createCli = (): Command => {
     .command("export")
     .description("Convert Markdown to HTML or PDF")
     .requiredOption("-i, --input <path>", "Input Markdown path")
-    .requiredOption("-f, --format <format>", "Output format: html | pdf")
+    .requiredOption(
+      "-f, --format <formats>",
+      "Export formats list (comma-separated)"
+    )
     .option("--overwrite", "Overwrite existing output file")
     .action(async (options) => {
       await runExportCommand({
         inputPath: options.input,
-        format: options.format,
+        formats: options.format,
         overwrite: Boolean(options.overwrite)
       });
     });
